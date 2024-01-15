@@ -101,7 +101,18 @@ AddEventHandler('esx:playerLoaded',function(xPlayer, isNew, skin)
     SetEntityHealth(PlayerPedId(), 200)
 end)
 
-
+RegisterNetEvent('onResourceStart', function(res)
+    if (GetCurrentResourceName() ~= res) then
+        return
+      end
+    Wait(2000)
+    print('Starting hud')
+    local hudSettings = GetResourceKvpString('hudSettings')
+    if hudSettings then loadSettings(json.decode(hudSettings)) end
+    PlayerData = ESX.GetPlayerData()
+    Wait(3000)
+    SetEntityHealth(PlayerPedId(), 200)
+end)
 -- RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
 --     PlayerData = {}
 -- end)
