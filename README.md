@@ -1,4 +1,4 @@
-# NoPixel 4.0 insipred hud converted to ESX fromt the original QBCore script.
+# NoPixel 4.0 insipred hud converted to ESX from the original QBCore script.
 
 ![Screenshot 2024-01-08 205814](https://github.com/rohKane/Kane-qb-hud-Nopixel-4.0-inspired/assets/47999933/6ee7a0a8-a4dd-416c-a647-bbeecdd4723b)
 
