@@ -1,14 +1,14 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local ESX = exports['es_extended']:getSharedObject()
 local ResetStress = false
 
 QBCore.Commands.Add('cash', 'Check Cash Balance', {}, false, function(source, _)
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = ESX.GetPlayerFromId(source)
     local cashamount = Player.PlayerData.money.cash
     TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashamount)
 end)
 
 QBCore.Commands.Add('bank', 'Check Bank Balance', {}, false, function(source, _)
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = ESX.GetPlayerFromId(source)
     local bankamount = Player.PlayerData.money.bank
     TriggerClientEvent('hud:client:ShowAccounts', source, 'bank', bankamount)
 end)
@@ -20,7 +20,7 @@ end, 'admin')
 RegisterNetEvent('hud:server:GainStress', function(amount)
     if Config.DisableStress then return end
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = ESX.GetPlayerFromId(src)
     local Job = Player.PlayerData.job.name
     local JobType = Player.PlayerData.job.type
     local newStress
@@ -39,13 +39,14 @@ RegisterNetEvent('hud:server:GainStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    TriggerClientEvent('QBCore:Notify', src, Lang:t('notify.stress_gain'), 'error', 1500)
+    Player.showNotification(Lang:t('notify.stress_gain'), 'error', 1500)
+
 end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
     if Config.DisableStress then return end
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = ESX.GetPlayerFromId(src)
     local newStress
     if not Player then return end
     if not ResetStress then
@@ -62,9 +63,10 @@ RegisterNetEvent('hud:server:RelieveStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    TriggerClientEvent('QBCore:Notify', src, Lang:t('notify.stress_removed'))
+    Player.showNotification(Lang:t('notify.stress_removed'))
 end)
 
-QBCore.Functions.CreateCallback('hud:server:getMenu', function(_, cb)
+
+ESX.RegisterServerCallback('hud:server:getMenu', function(_, cb)
     cb(Config.Menu)
 end)

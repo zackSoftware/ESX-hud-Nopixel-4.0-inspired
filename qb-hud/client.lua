@@ -1,5 +1,5 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-local PlayerData = QBCore.Functions.GetPlayerData()
+local ESX = exports['es_extended']:getSharedObject()
+local PlayerData = ESX.GetPlayerData()
 local config = Config
 local speedMultiplier = config.UseMPH and 2.23694 or 3.6
 local seatbeltOn = false
@@ -65,7 +65,8 @@ local function loadSettings(settings)
             SendNUIMessage({ test = true, event = k, toggle = v })
         end
     end
-    QBCore.Functions.Notify(Lang:t('notify.hud_settings_loaded'), 'success')
+    ESX.ShowNotification(Lang:t('notify.hud_settings_loaded'))
+    -- QBCore.Functions.Notify(Lang:t('notify.hud_settings_loaded'), 'success')
     Wait(1000)
     TriggerEvent('hud:client:LoadMap')
 end
@@ -90,22 +91,24 @@ local function hasHarness(items)
     harness = _harness
 end
 
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('esx:playerLoaded')
+AddEventHandler('esx:playerLoaded',function(xPlayer, isNew, skin)
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
     if hudSettings then loadSettings(json.decode(hudSettings)) end
-    PlayerData = QBCore.Functions.GetPlayerData()
+    PlayerData = ESX.GetPlayerData()
     Wait(3000)
     SetEntityHealth(PlayerPedId(), 200)
 end)
 
-RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
-    PlayerData = {}
-end)
 
-RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
-    PlayerData = val
-end)
+-- RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+--     PlayerData = {}
+-- end)
+
+-- RegisterNetEvent('QBCore:Player:SetPlayerData', function(val)
+--     PlayerData = val
+-- end)
 
 AddEventHandler('onResourceStart', function(resourceName)
     if GetCurrentResourceName() ~= resourceName then return end
@@ -141,7 +144,7 @@ RegisterKeyMapping('menu', 'Open Menu', 'keyboard', config.OpenMenu)
 -- Reset hud
 local function restartHud()
     TriggerEvent('hud:client:playResetHudSounds')
-    QBCore.Functions.Notify(Lang:t('notify.hud_restart'), 'error')
+    ESX.ShowNotification(Lang:t('notify.hud_restart'), 'error', 3000)
     if IsPedInAnyVehicle(PlayerPedId()) then
         Wait(2600)
         SendNUIMessage({ action = 'car', show = false })
@@ -151,7 +154,8 @@ local function restartHud()
     SendNUIMessage({ action = 'hudtick', show = false })
     SendNUIMessage({ action = 'hudtick', show = true })
     Wait(2600)
-    QBCore.Functions.Notify(Lang:t('notify.hud_start'), 'success')
+    ESX.ShowNotification(Lang:t('notify.hud_start'), 'success', 3000)
+    
 end
 
 RegisterNUICallback('restartHud', function(_, cb)
@@ -176,7 +180,7 @@ RegisterNetEvent('hud:client:resetStorage', function()
     if Menu.isResetSoundsChecked then
         TriggerServerEvent('InteractSound_SV:PlayOnSource', 'airwrench', 0.1)
     end
-    QBCore.Functions.TriggerCallback('hud:server:getMenu', function(menu)
+    ESX.TriggerServerCallback('hud:server:getMenu', function(menu)
         loadSettings(menu); SetResourceKvp('hudSettings', json.encode(menu))
     end)
 end)
@@ -371,7 +375,9 @@ RegisterNetEvent('hud:client:LoadMap', function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t('notify.load_square_map'))
+            
+            ESX.ShowNotification(Lang:t('notify.load_square_map'), 'success', 3000)
+
         end
         SetMinimapClipType(0)
         AddReplaceTexture('platform:/textures/graphics', 'radarmasksm', 'squaremap', 'radarmasksm')
@@ -400,7 +406,8 @@ RegisterNetEvent('hud:client:LoadMap', function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t('notify.loaded_square_map'))
+            ESX.ShowNotification(Lang:t('notify.loaded_square_map'), 'success', 3000)
+
         end
     elseif Menu.isToggleMapShapeChecked == 'circle' then
         RequestStreamedTextureDict('circlemap', false)
@@ -408,7 +415,8 @@ RegisterNetEvent('hud:client:LoadMap', function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t('notify.load_circle_map'))
+            ESX.ShowNotification(Lang:t('notify.load_circle_map'))
+
         end
         SetMinimapClipType(1)
         AddReplaceTexture('platform:/textures/graphics', 'radarmasksm', 'circlemap', 'radarmasksm')
@@ -437,7 +445,8 @@ RegisterNetEvent('hud:client:LoadMap', function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t('notify.loaded_circle_map'))
+            ESX.ShowNotification(Lang:t('notify.loaded_circle_map'))
+
         end
     end
 end)
@@ -535,14 +544,16 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         CinematicShow(false)
         Menu.isCinematicModeChecked = false
         if Menu.isCinematicNotifChecked then
-            QBCore.Functions.Notify(Lang:t('notify.cinematic_off'), 'error')
+            ESX.ShowNotification(Lang:t('notify.cinematic_off'), 'error')
+
         end
         DisplayRadar(1)
     else
         CinematicShow(true)
         Menu.isCinematicModeChecked = true
         if Menu.isCinematicNotifChecked then
-            QBCore.Functions.Notify(Lang:t('notify.cinematic_on'))
+            ESX.ShowNotification(Lang:t('notify.cinematic_on'))
+
         end
     end
     TriggerEvent('hud:client:playHudChecklistSound')
@@ -845,7 +856,8 @@ CreateThread(function()
                 if exports['LegacyFuel']:GetFuel(GetVehiclePedIsIn(ped, false)) <= 20 then -- At 20% Fuel Left
                     if Menu.isLowFuelChecked then
                         TriggerServerEvent('InteractSound_SV:PlayOnSource', 'pager', 0.10)
-                        QBCore.Functions.Notify(Lang:t('notify.low_fuel'), 'error')
+                        ESX.ShowNotification(Lang:t('notify.low_fuel'), 'error')
+
                         Wait(60000) -- repeats every 1 min until empty
                     end
                 end
