@@ -1,11 +1,11 @@
 fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
-description 'qb-hud'
-version '2.2.0'
+description 'esx-hud'
+version '2.2.1'
 
 shared_scripts {
-    '@qb-core/shared/locale.lua',
+    '@es_extended/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
     'config.lua'
