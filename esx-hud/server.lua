@@ -1,21 +1,28 @@
 local ESX = exports['es_extended']:getSharedObject()
 local ResetStress = false
 
-QBCore.Commands.Add('cash', 'Check Cash Balance', {}, false, function(source, _)
-    local Player = ESX.GetPlayerFromId(source)
-    local cashamount = Player.PlayerData.money.cash
+ESX.RegisterCommand('cash', 'user', function(xPlayer)
+	local Player = ESX.GetPlayerFromId(source)
+    local cashamount = xPlayer.getAccount('money')
     TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashamount)
-end)
+end, false, {
+	help = 'Check Cash Balance'
+})
 
-QBCore.Commands.Add('bank', 'Check Bank Balance', {}, false, function(source, _)
-    local Player = ESX.GetPlayerFromId(source)
-    local bankamount = Player.PlayerData.money.bank
+
+ESX.RegisterCommand('cash', 'user', function(xPlayer)
+	local Player = ESX.GetPlayerFromId(source)
+    local bankamount = xPlayer.getAccount('bank')
     TriggerClientEvent('hud:client:ShowAccounts', source, 'bank', bankamount)
-end)
+end, false, {
+	help = 'Check bank Balance'
+})
 
-QBCore.Commands.Add('dev', 'Enable/Disable developer Mode', {}, false, function(source, _)
-    TriggerClientEvent('qb-admin:client:ToggleDevmode', source)
-end, 'admin')
+ESX.RegisterCommand('dev', 'admin', function(xPlayer)
+	TriggerClientEvent('qb-admin:client:ToggleDevmode', xPlayer)
+end, false, {
+	help = 'Enable/Disable developer Mode'
+})
 
 RegisterNetEvent('hud:server:GainStress', function(amount)
     if Config.DisableStress then return end
@@ -39,7 +46,7 @@ RegisterNetEvent('hud:server:GainStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    Player.showNotification(Lang:t('notify.stress_gain'), 'error', 1500)
+    Player.showNotification(_U('notify.stress_gain'), 'error', 1500)
 
 end)
 
@@ -63,7 +70,7 @@ RegisterNetEvent('hud:server:RelieveStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    Player.showNotification(Lang:t('notify.stress_removed'))
+    Player.showNotification(_U('notify.stress_removed'))
 end)
 
 

@@ -65,8 +65,8 @@ local function loadSettings(settings)
             SendNUIMessage({ test = true, event = k, toggle = v })
         end
     end
-    ESX.ShowNotification(Lang:t('notify.hud_settings_loaded'))
-    -- QBCore.Functions.Notify(Lang:t('notify.hud_settings_loaded'), 'success')
+    ESX.ShowNotification(_U('notify.hud_settings_loaded'))
+    -- QBCore.Functions.Notify(_U('notify.hud_settings_loaded'), 'success')
     Wait(1000)
     TriggerEvent('hud:client:LoadMap')
 end
@@ -144,7 +144,7 @@ RegisterKeyMapping('menu', 'Open Menu', 'keyboard', config.OpenMenu)
 -- Reset hud
 local function restartHud()
     TriggerEvent('hud:client:playResetHudSounds')
-    ESX.ShowNotification(Lang:t('notify.hud_restart'), 'error', 3000)
+    ESX.ShowNotification(_U('notify.hud_restart'), 'error', 3000)
     if IsPedInAnyVehicle(PlayerPedId()) then
         Wait(2600)
         SendNUIMessage({ action = 'car', show = false })
@@ -154,7 +154,7 @@ local function restartHud()
     SendNUIMessage({ action = 'hudtick', show = false })
     SendNUIMessage({ action = 'hudtick', show = true })
     Wait(2600)
-    ESX.ShowNotification(Lang:t('notify.hud_start'), 'success', 3000)
+    ESX.ShowNotification(_U('notify.hud_start'), 'success', 3000)
     
 end
 
@@ -376,7 +376,7 @@ RegisterNetEvent('hud:client:LoadMap', function()
         end
         if Menu.isMapNotifChecked then
             
-            ESX.ShowNotification(Lang:t('notify.load_square_map'), 'success', 3000)
+            ESX.ShowNotification(_U('notify.load_square_map'), 'success', 3000)
 
         end
         SetMinimapClipType(0)
@@ -406,7 +406,7 @@ RegisterNetEvent('hud:client:LoadMap', function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            ESX.ShowNotification(Lang:t('notify.loaded_square_map'), 'success', 3000)
+            ESX.ShowNotification(_U('notify.loaded_square_map'), 'success', 3000)
 
         end
     elseif Menu.isToggleMapShapeChecked == 'circle' then
@@ -415,7 +415,7 @@ RegisterNetEvent('hud:client:LoadMap', function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            ESX.ShowNotification(Lang:t('notify.load_circle_map'))
+            ESX.ShowNotification(_U('notify.load_circle_map'))
 
         end
         SetMinimapClipType(1)
@@ -445,7 +445,7 @@ RegisterNetEvent('hud:client:LoadMap', function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            ESX.ShowNotification(Lang:t('notify.loaded_circle_map'))
+            ESX.ShowNotification(_U('notify.loaded_circle_map'))
 
         end
     end
@@ -544,7 +544,7 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         CinematicShow(false)
         Menu.isCinematicModeChecked = false
         if Menu.isCinematicNotifChecked then
-            ESX.ShowNotification(Lang:t('notify.cinematic_off'), 'error')
+            ESX.ShowNotification(_U('notify.cinematic_off'), 'error')
 
         end
         DisplayRadar(1)
@@ -552,7 +552,7 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         CinematicShow(true)
         Menu.isCinematicModeChecked = true
         if Menu.isCinematicNotifChecked then
-            ESX.ShowNotification(Lang:t('notify.cinematic_on'))
+            ESX.ShowNotification(_U('notify.cinematic_on'))
 
         end
     end
@@ -856,7 +856,7 @@ CreateThread(function()
                 if exports['LegacyFuel']:GetFuel(GetVehiclePedIsIn(ped, false)) <= 20 then -- At 20% Fuel Left
                     if Menu.isLowFuelChecked then
                         TriggerServerEvent('InteractSound_SV:PlayOnSource', 'pager', 0.10)
-                        ESX.ShowNotification(Lang:t('notify.low_fuel'), 'error')
+                        ESX.ShowNotification(_U('notify.low_fuel'), 'error')
 
                         Wait(60000) -- repeats every 1 min until empty
                     end
