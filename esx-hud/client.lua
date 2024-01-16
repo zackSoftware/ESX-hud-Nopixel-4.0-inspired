@@ -6,8 +6,6 @@ local seatbeltOn = false
 local cruiseOn = false
 local showAltitude = false
 local showSeatbelt = false
-local nos = 0
-local stress = 0
 local hunger = 100
 local thirst = 100
 local cashAmount = 0
@@ -65,8 +63,8 @@ local function loadSettings(settings)
             SendNUIMessage({ test = true, event = k, toggle = v })
         end
     end
-    ESX.ShowNotification(_U('notify.hud_settings_loaded'))
-    -- QBCore.Functions.Notify(_U('notify.hud_settings_loaded'), 'success')
+    ESX.ShowNotification(_U('hud_settings_loaded'))
+    -- QBCore.Functions.Notify(_U('hud_settings_loaded'), 'success')
     Wait(1000)
     TriggerEvent('hud:client:LoadMap')
 end
@@ -101,18 +99,7 @@ AddEventHandler('esx:playerLoaded',function(xPlayer, isNew, skin)
     SetEntityHealth(PlayerPedId(), 200)
 end)
 
-RegisterNetEvent('onResourceStart', function(res)
-    if (GetCurrentResourceName() ~= res) then
-        return
-      end
-    Wait(2000)
-    print('Starting hud')
-    local hudSettings = GetResourceKvpString('hudSettings')
-    if hudSettings then loadSettings(json.decode(hudSettings)) end
-    PlayerData = ESX.GetPlayerData()
-    Wait(3000)
-    SetEntityHealth(PlayerPedId(), 200)
-end)
+
 -- RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
 --     PlayerData = {}
 -- end)
@@ -126,6 +113,13 @@ AddEventHandler('onResourceStart', function(resourceName)
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
     if hudSettings then loadSettings(json.decode(hudSettings)) end
+    Wait(2000)
+    print('Starting hud')
+    local hudSettings = GetResourceKvpString('hudSettings')
+    if hudSettings then loadSettings(json.decode(hudSettings)) end
+    PlayerData = ESX.GetPlayerData()
+    Wait(3000)
+    SetEntityHealth(PlayerPedId(), 200)
 end)
 
 AddEventHandler('pma-voice:radioActive', function(data)
@@ -155,7 +149,7 @@ RegisterKeyMapping('menu', 'Open Menu', 'keyboard', config.OpenMenu)
 -- Reset hud
 local function restartHud()
     TriggerEvent('hud:client:playResetHudSounds')
-    ESX.ShowNotification(_U('notify.hud_restart'), 'error', 3000)
+    ESX.ShowNotification(_U('hud_restart'), 'error', 3000)
     if IsPedInAnyVehicle(PlayerPedId()) then
         Wait(2600)
         SendNUIMessage({ action = 'car', show = false })
@@ -165,7 +159,7 @@ local function restartHud()
     SendNUIMessage({ action = 'hudtick', show = false })
     SendNUIMessage({ action = 'hudtick', show = true })
     Wait(2600)
-    ESX.ShowNotification(_U('notify.hud_start'), 'success', 3000)
+    ESX.ShowNotification(_U('hud_start'), 'success', 3000)
     
 end
 
@@ -336,13 +330,6 @@ RegisterNUICallback('dynamicThirst', function(_, cb)
     cb('ok')
 end)
 
-RegisterNUICallback('dynamicStress', function(_, cb)
-    Wait(50)
-    Menu.isDynamicStressChecked = not Menu.isDynamicStressChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
-    saveSettings()
-    cb('ok')
-end)
 
 RegisterNUICallback('dynamicOxygen', function(_, cb)
     Wait(50)
@@ -387,7 +374,7 @@ RegisterNetEvent('hud:client:LoadMap', function()
         end
         if Menu.isMapNotifChecked then
             
-            ESX.ShowNotification(_U('notify.load_square_map'), 'success', 3000)
+            ESX.ShowNotification(_U('load_square_map'), 'success', 3000)
 
         end
         SetMinimapClipType(0)
@@ -417,7 +404,7 @@ RegisterNetEvent('hud:client:LoadMap', function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            ESX.ShowNotification(_U('notify.loaded_square_map'), 'success', 3000)
+            ESX.ShowNotification(_U('loaded_square_map'), 'success', 3000)
 
         end
     elseif Menu.isToggleMapShapeChecked == 'circle' then
@@ -426,7 +413,7 @@ RegisterNetEvent('hud:client:LoadMap', function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            ESX.ShowNotification(_U('notify.load_circle_map'))
+            ESX.ShowNotification(_U('load_circle_map'))
 
         end
         SetMinimapClipType(1)
@@ -456,7 +443,7 @@ RegisterNetEvent('hud:client:LoadMap', function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            ESX.ShowNotification(_U('notify.loaded_circle_map'))
+            ESX.ShowNotification(_U('loaded_circle_map'))
 
         end
     end
@@ -555,7 +542,7 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         CinematicShow(false)
         Menu.isCinematicModeChecked = false
         if Menu.isCinematicNotifChecked then
-            ESX.ShowNotification(_U('notify.cinematic_off'), 'error')
+            ESX.ShowNotification(_U('cinematic_off'), 'error')
 
         end
         DisplayRadar(1)
@@ -563,7 +550,7 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         CinematicShow(true)
         Menu.isCinematicModeChecked = true
         if Menu.isCinematicNotifChecked then
-            ESX.ShowNotification(_U('notify.cinematic_on'))
+            ESX.ShowNotification(_U('cinematic_on'))
 
         end
     end
@@ -581,9 +568,7 @@ RegisterNetEvent('hud:client:UpdateNeeds', function(newHunger, newThirst) -- Tri
     thirst = newThirst
 end)
 
-RegisterNetEvent('hud:client:UpdateStress', function(newStress) -- Add this event with adding stress elsewhere
-    stress = newStress
-end)
+
 
 RegisterNetEvent('hud:client:ToggleShowSeatbelt', function()
     showSeatbelt = not showSeatbelt
@@ -629,7 +614,6 @@ local function updatePlayerHud(data)
             dynamicArmor = data[3],
             dynamicHunger = data[4],
             dynamicThirst = data[5],
-            dynamicStress = data[6],
             dynamicOxygen = data[7],
             dynamicEngine = data[8],
             dynamicNitro = data[9],
@@ -638,7 +622,6 @@ local function updatePlayerHud(data)
             armor = data[12],
             thirst = data[13],
             hunger = data[14],
-            stress = data[15],
             voice = data[16],
             radio = data[17],
             talking = data[18],
@@ -709,7 +692,7 @@ CreateThread(function()
         else
             Wait(50)
         end
-        if LocalPlayer.state.isLoggedIn then
+        if ESX.IsPlayerLoaded() then
             local show = true
             local player = PlayerPedId()
             local playerId = PlayerId()
@@ -722,7 +705,7 @@ CreateThread(function()
                     armed = false
                 end
             end
-            playerDead = IsEntityDead(player) or PlayerData.metadata['inlaststand'] or PlayerData.metadata['isdead'] or false
+            playerDead = IsEntityDead(player) or false
             parachute = GetPedParachuteState(player)
             -- Stamina
             --if not IsEntityInWater(player) then
@@ -758,7 +741,7 @@ CreateThread(function()
                     GetPedArmour(player),
                     thirst,
                     hunger,
-                    stress,
+                    -- stress,
                     voice,
                     LocalPlayer.state['radioChannel'],
                     talking,
@@ -767,8 +750,8 @@ CreateThread(function()
                     parachute,
                     -1,
                     cruiseOn,
-                    nitroActive,
-                    harness,
+                    -- nitroActive,
+                    -- harness,
                     hp,
                     math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
                     -1,
@@ -802,17 +785,17 @@ CreateThread(function()
                     GetPedArmour(player),
                     thirst,
                     hunger,
-                    stress,
+                   -- stress,
                     voice,
                     LocalPlayer.state['radioChannel'],
                     talking,
                     armed,
                     oxygen,
                     GetPedParachuteState(player),
-                    nos,
+                   -- nos,
                     cruiseOn,
-                    nitroActive,
-                    harness,
+                 --   nitroActive,
+                  --  harness,
                     hp,
                     math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
                     (GetVehicleEngineHealth(vehicle) / 10),
@@ -867,7 +850,7 @@ CreateThread(function()
                 if exports['LegacyFuel']:GetFuel(GetVehiclePedIsIn(ped, false)) <= 20 then -- At 20% Fuel Left
                     if Menu.isLowFuelChecked then
                         TriggerServerEvent('InteractSound_SV:PlayOnSource', 'pager', 0.10)
-                        ESX.ShowNotification(_U('notify.low_fuel'), 'error')
+                        ESX.ShowNotification(_U('low_fuel'), 'error')
 
                         Wait(60000) -- repeats every 1 min until empty
                     end
@@ -955,7 +938,7 @@ if not config.DisableStress then
 
     CreateThread(function() -- Shooting
         while true do
-            if LocalPlayer.state.isLoggedIn then
+            if ESX.IsPlayerLoaded() then
                 local ped = PlayerPedId()
                 local weapon = GetSelectedPedWeapon(ped)
                 if weapon ~= `WEAPON_UNARMED` then
