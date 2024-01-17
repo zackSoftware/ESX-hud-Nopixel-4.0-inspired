@@ -1,19 +1,20 @@
 local ESX = exports['es_extended']:getSharedObject()
-local ResetStress = false
 
 ESX.RegisterCommand('cash', 'user', function(xPlayer)
-	local Player = ESX.GetPlayerFromId(xPlayer)
-    local cashamount = xPlayer.getAccount('money')
-    TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashamount)
+    local src = tonumber(xPlayer.playerId) 
+	local Player = ESX.GetPlayerFromId(src)
+    local cashamount = Player.getAccount('money').money
+    print(json.encode(cashamount))
+    TriggerClientEvent('hud:client:ShowAccounts', src, 'cash', cashamount)
 end, false, {
 	help = 'Check Cash Balance'
 })
 
 
 ESX.RegisterCommand('bank', 'user', function(xPlayer)
-	local Player = ESX.GetPlayerFromId(xPlayer)
-    local bankamount = xPlayer.getAccount('bank')
-    TriggerClientEvent('hud:client:ShowAccounts', source, 'bank', bankamount)
+	local Player = ESX.GetPlayerFromId(xPlayer.playerId)
+    local bankamount = Player.getAccount('bank').money
+    TriggerClientEvent('hud:client:ShowAccounts', xPlayer.playerId, 'bank', bankamount)
 end, false, {
 	help = 'Check bank Balance'
 })

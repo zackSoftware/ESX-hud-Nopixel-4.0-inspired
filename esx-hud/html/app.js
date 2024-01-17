@@ -805,7 +805,7 @@ const playerHud = {
             //this.thirst = data.thirst;
             thirstBar.set(data.thirst);
             //this.stress = data.stress;
-            //stressBar.set(data.stress);
+            stressBar.set(data.stress);
             //this.voice = data.voiceBar;
             voicesBar.set(data.voice * 20);
             //this.talking = data.talking;
@@ -814,17 +814,17 @@ const playerHud = {
             radioBar.set(100);
             this.radioActive = data.radioActive;
             this.nos = data.nos;
-            // nosBar.set(data.nos);
+            nosBar.set(data.nos);
             this.oxygen = data.oxygen;
             oxygenBar.set(data.oxygen);
             this.cruise = data.cruise;
-            // this.nitroActive = data.nitroActive;
-            // this.harness = data.harness;
+            this.nitroActive = data.nitroActive;
+            this.harness = data.harness;
             this.speed = data.speed;
             this.armed = data.armed;
             this.parachute = data.parachute;
             //this.hp = data.hp * 5;
-            //harnessBar.set(data.hp * 5);
+            harnessBar.set(data.hp * 5);
             //this.engine = data.engine;
             engineBar.set(data.engine);
             this.cinematic = data.cinematic;
@@ -834,10 +834,10 @@ const playerHud = {
             this.dynamicArmor = data.dynamicArmor;
             this.dynamicHunger = data.dynamicHunger;
             this.dynamicThirst = data.dynamicThirst;
-            // this.dynamicStress = data.dynamicStress;
+            this.dynamicStress = data.dynamicStress;
             this.dynamicOxygen = data.dynamicOxygen;
             this.dynamicEngine = data.dynamicEngine;
-            // this.dynamicNitro = data.dynamicNitro;
+            this.dynamicNitro = data.dynamicNitro;
 
             //if (data.dynamicHealth == true) {
             //if (data.health >= 100) {
@@ -905,15 +905,15 @@ const playerHud = {
                 this.thirstColor = "#1a7cad";
             }
 
-            // if (data.dynamicStress == true) {
-            //     if (data.stress == 0) {
-            //         this.showStress = false;
-            //     } else {
-            //         this.showStress = true;
-            //     }
-            // } else if (data.dynamicStress == false) {
-            //     this.showStress = true;
-            // }
+            if (data.dynamicStress == true) {
+                if (data.stress == 0) {
+                    this.showStress = false;
+                } else {
+                    this.showStress = true;
+                }
+            } else if (data.dynamicStress == false) {
+                this.showStress = true;
+            }
 
             if (data.dynamicOxygen == true) {
                 if (data.oxygen >= 100) {
@@ -948,26 +948,26 @@ const playerHud = {
                 this.engineColor = "#3FA554";
             }
 
-            // if (data.dynamicNitro == true) {
-            //     if (data.nos === 0 || data.nos === undefined) {
-            //         this.showNos = false;
-            //     } else if (data.nos < 0) {
-            //         this.showNos = false;
-            //     } else {
-            //         this.showNos = true;
-            //     }
-            // } else if (data.dynamicNitro == false) {
-            //     if (data.nos < 0) {
-            //         this.showNos = false;
-            //     } else {
-            //         this.showNos = true;
-            //     }
-            // }
-            // if (data.nitroActive) {
-            //     this.nosColor = "#D64763";
-            // } else {
-            //     this.nosColor = "#FFFFFF";
-            // }
+            if (data.dynamicNitro == true) {
+                if (data.nos === 0 || data.nos === undefined) {
+                    this.showNos = false;
+                } else if (data.nos < 0) {
+                    this.showNos = false;
+                } else {
+                    this.showNos = true;
+                }
+            } else if (data.dynamicNitro == false) {
+                if (data.nos < 0) {
+                    this.showNos = false;
+                } else {
+                    this.showNos = true;
+                }
+            }
+            if (data.nitroActive) {
+                this.nosColor = "#D64763";
+            } else {
+                this.nosColor = "#FFFFFF";
+            }
 
             if (data.radioActive) {
                 //this.talkingColor = "#D64763";
@@ -1004,11 +1004,11 @@ const playerHud = {
                 this.showCruise = false;
             }
 
-            // if (data.harness === true) {
-            //     this.showHarness = true;
-            // } else {
-            //     this.showHarness = false;
-            // }
+            if (data.harness === true) {
+                this.showHarness = true;
+            } else {
+                this.showHarness = false;
+            }
             if (data.armed === true) {
                 this.showArmed = true;
             } else {
@@ -1244,11 +1244,11 @@ var healthBar = new ldBar("#Health");
 var armorBar = new ldBar("#Armor");
 var hungerBar = new ldBar("#Hunger");
 var thirstBar = new ldBar("#Thirst");
-//var stressBar = new ldBar("#Stress");
+var stressBar = new ldBar("#Stress");
 var oxygenBar = new ldBar("#Oxygen");
 var engineBar = new ldBar("#Engine");
-//var nosBar = new ldBar("#Nos");
-//var harnessBar = new ldBar("#Harness");
+var nosBar = new ldBar("#Nos");
+var harnessBar = new ldBar("#Harness");
 
 function updateRPM(rpm) {
     var rpmBar = document.getElementById("rpmBar");

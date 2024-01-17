@@ -1,11 +1,7 @@
 Config = {}
 Config.OpenMenu = 'I'             -- https://docs.fivem.net/docs/game-references/input-mapper-parameter-ids/keyboard/
-Config.StressChance = 0.1         -- Default: 10% -- Percentage Stress Chance When Shooting (0-1)
 Config.UseMPH = false              -- If true speed math will be done as MPH, if false KPH will be used (YOU HAVE TO CHANGE CONTENT IN STYLES.CSS TO DISPLAY THE CORRECT TEXT)
-Config.MinimumStress = 50         -- Minimum Stress Level For Screen Shaking
-Config.MinimumSpeedUnbuckled = 50 -- Going Over This Speed Unbuckled Will Cause Stress
-Config.MinimumSpeed = 100         -- Going Over This Speed While Buckled Will Cause Stress
-Config.DisableStress = true      -- If true will disable stress completely for all players
+
 
 -- Stress
 Config.WhitelistedWeaponArmed = { -- Disable showing armed icon from weapons in this table
@@ -49,73 +45,6 @@ Config.WhitelistedWeaponArmed = { -- Disable showing armed icon from weapons in 
     [`weapon_flare`] = true
 }
 
-Config.WhitelistedWeaponStress = { -- Disable gaining stress from weapons in this table
-    [`weapon_petrolcan`] = true,
-    [`weapon_hazardcan`] = true,
-    [`weapon_fireextinguisher`] = true
-}
-
-Config.VehClassStress = { -- Enable/Disable gaining stress from vehicle classes in this table
-    ['0'] = true,         -- Compacts
-    ['1'] = true,         -- Sedans
-    ['2'] = true,         -- SUVs
-    ['3'] = true,         -- Coupes
-    ['4'] = true,         -- Muscle
-    ['5'] = true,         -- Sports Classics
-    ['6'] = true,         -- Sports
-    ['7'] = true,         -- Super
-    ['8'] = true,         -- Motorcycles
-    ['9'] = true,         -- Off Road
-    ['10'] = true,        -- Industrial
-    ['11'] = true,        -- Utility
-    ['12'] = true,        -- Vans
-    ['13'] = false,       -- Cycles
-    ['14'] = false,       -- Boats
-    ['15'] = false,       -- Helicopters
-    ['16'] = false,       -- Planes
-    ['18'] = false,       -- Emergency
-    ['19'] = false,       -- Military
-    ['20'] = false,       -- Commercial
-    ['21'] = false        -- Trains
-}
-
-Config.WhitelistedVehicles = { -- Disable gaining stress from speeding in any vehicle in this table
-    --[`adder`] = true
-}
-
-Config.WhitelistedJobs = { -- Disable stress completely for players with matching job or job type
-    ['ambulance'] = true
-}
-
-Config.Intensity = {
-    ['blur'] = {
-        [1] = {
-            min = 50,
-            max = 60,
-            intensity = 1500,
-        },
-        [2] = {
-            min = 60,
-            max = 70,
-            intensity = 2000,
-        },
-        [3] = {
-            min = 70,
-            max = 80,
-            intensity = 2500,
-        },
-        [4] = {
-            min = 80,
-            max = 90,
-            intensity = 2700,
-        },
-        [5] = {
-            min = 90,
-            max = 100,
-            intensity = 3000,
-        },
-    }
-}
 
 Config.EffectInterval = {
     [1] = {
@@ -233,5 +162,5 @@ Config.vehicles = {
 Config.enginebrake = true -- brakes the car if you downshift the wrong way
 
 
-Config.gearhud = 2 -- if 1 - show gear / if 2 show gear and km/h and Rpm from 0 to 1 / if 0 disable hud
+Config.gearhud = 1 -- if 1 - show gear / if 2 show gear and km/h and Rpm from 0 to 1 / if 0 disable hud
 
